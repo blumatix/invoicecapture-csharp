@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace InvoiceFeatureDetection
+namespace InvoiceCapture
 {
   class Program
   {
     static void Main(string[] args)
     {
       string invoiceFolder;
-      string hostname;
       string apiKey;
-      bool isAsync;
-
 
       var options = new Options();
       var parser = new CommandLine.Parser(s =>
@@ -34,12 +25,9 @@ namespace InvoiceFeatureDetection
       if (parser.ParseArguments(args, options))
       {
         invoiceFolder = options.InvoiceFolder;
-        hostname = options.Hostname;
         apiKey = options.Key;
-        isAsync = options.IsAsync;
 
         Console.WriteLine($"Invoice folder: {invoiceFolder}");
-        Console.WriteLine($"Hostname: {hostname}");
         Console.WriteLine($"ApiKey: {apiKey}");
       }
       else
@@ -54,8 +42,10 @@ namespace InvoiceFeatureDetection
         return;
       }
 
-      const InvoiceDetailType invoiceFeatures = 
+      const InvoiceDetailType invoiceDetails = 
         InvoiceDetailType.DocumentType
+        | InvoiceDetailType.NetTotalAmount
+        | InvoiceDetailType.VatAmount
         | InvoiceDetailType.Iban
         | InvoiceDetailType.GrandTotalAmount
         | InvoiceDetailType.InvoiceId
@@ -63,22 +53,21 @@ namespace InvoiceFeatureDetection
 
       var invoices = Directory.GetFiles(invoiceFolder);
 
-
       foreach (var invoice in invoices)
       {
-        RequestInvoiceDetails(hostname, apiKey, invoice, invoiceFeatures);
+        RequestInvoiceDetails(apiKey, invoice, invoiceDetails);
       }
 
       Console.WriteLine("Press any key to exit...");
       Console.ReadKey();
     }
 
-    private static void RequestInvoiceDetails(string hostname, string apiKey, string filename, InvoiceDetailType invoiceFeatures)
+    private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures)
     {
+      const string urlString = "http://blumatixcapturesdk-v1-2.azurewebsites.net/v1-2/invoicedetail/detect";
+
       using (var client = new HttpClient())
       {
-        var urlString = $"http://{hostname}/v1-2/invoicedetail/detect";
-
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.DefaultRequestHeaders.Add("X-ApiKey", apiKey);
 
@@ -107,7 +96,7 @@ namespace InvoiceFeatureDetection
       }
     }
 
-    private static StringContent CreateRequest(string filename, InvoiceDetailType invoiceFeatures, bool isAsync=false)
+    private static StringContent CreateRequest(string filename, InvoiceDetailType invoiceFeatures)
     {
       byte[] buffer;
 
@@ -117,30 +106,15 @@ namespace InvoiceFeatureDetection
         reader.BaseStream.Read(buffer, 0, (int)reader.BaseStream.Length);
       }
 
-      if (!isAsync)
+      var request = new InvoiceDetailRequest
       {
-        var request = new InvoiceDetailRequest
-        {
-          Flags = invoiceFeatures,
-          Invoice = Convert.ToBase64String(buffer),
-        };
+        Flags = invoiceFeatures,
+        Invoice = Convert.ToBase64String(buffer),
+      };
 
-        var stringContent = new StringContent(request.ToJson(), Encoding.UTF8, "application/json");
+      var stringContent = new StringContent(request.ToJson(), Encoding.UTF8, "application/json");
 
-        return stringContent;
-      }
-      else
-      {
-        var request = new DetectInvoiceRequestAsync
-        {
-          Flags = invoiceFeatures,
-          Invoice = Convert.ToBase64String(buffer),
-        };
-
-        var stringContent = new StringContent(request.ToJson(), Encoding.UTF8, "application/json");
-
-        return stringContent;
-      }
+      return stringContent;
     }
   }
 }

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceFeatureDetection", "InvoiceFeatureDetection\InvoiceFeatureDetection.csproj", "{634084D1-C812-441E-AE99-053C0562B770}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceCapture", "InvoiceFeatureDetection\InvoiceCapture.csproj", "{634084D1-C812-441E-AE99-053C0562B770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4008E59-6380-441E-BD4F-4E7B0557C6F3}
 	EndGlobalSection
 EndGlobal

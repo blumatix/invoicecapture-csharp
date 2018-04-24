@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace InvoiceFeatureDetection
+namespace InvoiceCapture
 {
   public class InvoiceDetailsResponse
   {
-    public List<InvoiceFeatureDetectionResponse> InvoiceDetailTypePredictions { get; set; }
+    public List<InvoiceDetailDetectionResponse> InvoiceDetailTypePredictions { get; set; }
 
     public override string ToString()
     {

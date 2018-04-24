@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace InvoiceFeatureDetection
+namespace InvoiceCapture
 {
   public class InvoiceDetailRequest
   {

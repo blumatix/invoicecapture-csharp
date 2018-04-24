@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 
-namespace InvoiceFeatureDetection
+namespace InvoiceCapture
 {
   public enum InvoiceProcessingState
   {
@@ -16,7 +15,7 @@ namespace InvoiceFeatureDetection
   {
     public InvoiceProcessingState State { get; set; }
 
-    public IList<InvoiceFeatureDetectionResponse> InvoiceDetailTypePredictions { get; set; }
+    public IList<InvoiceDetailDetectionResponse> InvoiceDetailTypePredictions { get; set; }
 
     public override string ToString()
     {

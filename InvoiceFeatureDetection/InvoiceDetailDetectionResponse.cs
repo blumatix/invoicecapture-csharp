@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace InvoiceFeatureDetection
+﻿namespace InvoiceCapture
 {
-  public class InvoiceFeatureDetectionResponse
+  public class InvoiceDetailDetectionResponse
   {
     public int Type { get; set; }
 
