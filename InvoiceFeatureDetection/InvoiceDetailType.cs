@@ -7,13 +7,19 @@ namespace InvoiceCapture
   {
     None = 0,
     Unspecified = 1,
+    DeliveryDate = 8,
     GrandTotalAmount = 16,
     InvoiceDate = 64,
-    NetTotalAmount = 256,
     InvoiceId = 1024,
-    DocumentTitle = 4096,
     DocumentType = 8192,
-    VatAmount = 131072,
-    Iban = 16384
+    Iban = 16384,
+    InvoiceCurrency = 524288,
+    CustomerId = 2097152,
+    UId = 8388608,
+    SenderOrderId = 16777216,
+    ReceiverOrderId = 33554432,
+    SenderOrderDate = 67108864,
+    ReceiverOrderDate = 134217728,
+    VatGroup = 536870912
   }
 }

@@ -51,10 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetectInvoiceStatusResponse.cs" />
+    <Compile Include="DetectInvoiceResponse.cs" />
     <Compile Include="InvoiceDetailRequest.cs" />
-    <Compile Include="InvoiceDetailsResponse.cs" />
-    <Compile Include="InvoiceDetailDetectionResponse.cs" />
     <Compile Include="InvoiceDetailType.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />

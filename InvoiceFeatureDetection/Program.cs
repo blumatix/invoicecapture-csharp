@@ -13,6 +13,7 @@ namespace InvoiceCapture
     {
       string invoiceFolder;
       string apiKey;
+      bool requestAllDetails;
 
       var options = new Options();
       var parser = new CommandLine.Parser(s =>
@@ -21,20 +22,20 @@ namespace InvoiceCapture
         s.HelpWriter = Console.Out;
       });
 
-
       if (parser.ParseArguments(args, options))
       {
         invoiceFolder = options.InvoiceFolder;
         apiKey = options.Key;
+        requestAllDetails = options.All;
 
         Console.WriteLine($"Invoice folder: {invoiceFolder}");
         Console.WriteLine($"ApiKey: {apiKey}");
+        Console.WriteLine($"All: {requestAllDetails}");
       }
       else
       {
         return;
       }
-
 
       if (!Directory.Exists(invoiceFolder))
       {
@@ -42,14 +43,18 @@ namespace InvoiceCapture
         return;
       }
 
-      const InvoiceDetailType invoiceDetails = 
-        InvoiceDetailType.DocumentType
-        | InvoiceDetailType.NetTotalAmount
-        | InvoiceDetailType.VatAmount
-        | InvoiceDetailType.Iban
-        | InvoiceDetailType.GrandTotalAmount
-        | InvoiceDetailType.InvoiceId
-        | InvoiceDetailType.InvoiceDate;
+      // If set to None than we request all possible invoice details.
+      var invoiceDetails = InvoiceDetailType.None;
+
+      if (!requestAllDetails)
+      {
+        invoiceDetails =
+          InvoiceDetailType.DocumentType
+          | InvoiceDetailType.Iban
+          | InvoiceDetailType.GrandTotalAmount
+          | InvoiceDetailType.InvoiceId
+          | InvoiceDetailType.InvoiceDate;
+      }
 
       var invoices = Directory.GetFiles(invoiceFolder);
 
@@ -64,7 +69,8 @@ namespace InvoiceCapture
 
     private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures)
     {
-      const string urlString = "http://blumatixcapturesdk-v1-2.azurewebsites.net/v1-2/invoicedetail/detect";
+      //const string urlString = "http://blumatixcapturesdk-v1-2.azurewebsites.net/v1-2/invoicedetail/detect";
+      const string urlString = "http://localhost:8090/invoicedetail/detect";
 
       using (var client = new HttpClient())
       {
@@ -80,9 +86,14 @@ namespace InvoiceCapture
 
           if (response.IsSuccessStatusCode)
           {
-            var invoiceDetailResponse = JsonConvert.DeserializeObject<InvoiceDetailsResponse>(resultString);
+            var invoiceDetailResponse = JsonConvert.DeserializeObject<DetectInvoiceResponse>(resultString, new JsonSerializerSettings
+            {
+              Formatting = Formatting.Indented,
+              TypeNameHandling = TypeNameHandling.Auto
+            });
+
             Console.WriteLine();
-            Console.WriteLine(invoiceDetailResponse);            
+            Console.WriteLine(invoiceDetailResponse);
           }
           else
           {

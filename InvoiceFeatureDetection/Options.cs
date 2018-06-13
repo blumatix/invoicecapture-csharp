@@ -11,6 +11,9 @@ namespace InvoiceCapture
     [Option('k', "key", Required = true, HelpText = "Your API key token")]
     public string Key { get; set; }
 
+    [Option('a', "all", Required = false, DefaultValue = false, HelpText = "Request all possible invoice details otherwise a small subset is requested")]
+    public bool All { get; set; }
+
     [HelpOption]
     public string GetUsage()
     {
