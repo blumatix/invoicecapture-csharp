@@ -27,10 +27,6 @@ namespace InvoiceCapture
         invoiceFolder = options.InvoiceFolder;
         apiKey = options.Key;
         requestAllDetails = options.All;
-
-        Console.WriteLine($"Invoice folder: {invoiceFolder}");
-        Console.WriteLine($"ApiKey: {apiKey}");
-        Console.WriteLine($"All: {requestAllDetails}");
       }
       else
       {
@@ -69,15 +65,16 @@ namespace InvoiceCapture
 
     private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures)
     {
-      //const string urlString = "http://blumatixcapturesdk-v1-2.azurewebsites.net/v1-2/invoicedetail/detect";
-      const string urlString = "http://localhost:8090/invoicedetail/detect";
+      const string urlString = "http://blumatixcapturesdk-v1-3.azurewebsites.net/invoicedetail/detect";
 
       using (var client = new HttpClient())
       {
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.DefaultRequestHeaders.Add("X-ApiKey", apiKey);
 
-        var request = CreateRequest(filename, invoiceFeatures);
+        // The current version must be provided in the request!!!
+        const string version = "v1-3";
+        var request = CreateRequest(filename, invoiceFeatures, version);
 
         try
         {
@@ -107,7 +104,7 @@ namespace InvoiceCapture
       }
     }
 
-    private static StringContent CreateRequest(string filename, InvoiceDetailType invoiceFeatures)
+    private static StringContent CreateRequest(string filename, InvoiceDetailType invoiceFeatures, string version)
     {
       byte[] buffer;
 
@@ -119,8 +116,9 @@ namespace InvoiceCapture
 
       var request = new InvoiceDetailRequest
       {
-        Flags = invoiceFeatures,
+        Filter = invoiceFeatures,
         Invoice = Convert.ToBase64String(buffer),
+        Version = version
       };
 
       var stringContent = new StringContent(request.ToJson(), Encoding.UTF8, "application/json");

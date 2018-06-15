@@ -4,9 +4,11 @@ namespace InvoiceCapture
 {
   public class InvoiceDetailRequest
   {
-    public InvoiceDetailType Flags { get; set; }
+    public InvoiceDetailType Filter { get; set; }
 
     public string Invoice { get; set; }
+
+    public string Version { get; set; }
 
     public string ToJson()
     {
