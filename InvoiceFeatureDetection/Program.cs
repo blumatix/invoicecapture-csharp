@@ -12,8 +12,11 @@ namespace InvoiceCapture
     static void Main(string[] args)
     {
       string invoiceFolder;
+      string singleInvoice;
       string apiKey;
-      bool requestAllDetails;
+      string sdkVersion;
+      bool writeFile;
+      string baseUrl;
 
       var options = new Options();
       var parser = new CommandLine.Parser(s =>
@@ -25,47 +28,41 @@ namespace InvoiceCapture
       if (parser.ParseArguments(args, options))
       {
         invoiceFolder = options.InvoiceFolder;
+        singleInvoice = options.Invoice;
         apiKey = options.Key;
-        requestAllDetails = options.All;
+        sdkVersion = options.SdkVersion;
+        writeFile = options.WriteFile;
+        baseUrl = options.BaseUrl;
       }
       else
       {
         return;
       }
 
-      if (!Directory.Exists(invoiceFolder))
-      {
-        Console.WriteLine($"InvoiceFolder {invoiceFolder} is invalid");
-        return;
-      }
-
       // If set to None than we request all possible invoice details.
       var invoiceDetails = InvoiceDetailType.None;
 
-      if (!requestAllDetails)
+      if (Directory.Exists(invoiceFolder))
       {
-        invoiceDetails =
-          InvoiceDetailType.DocumentType
-          | InvoiceDetailType.Iban
-          | InvoiceDetailType.GrandTotalAmount
-          | InvoiceDetailType.InvoiceId
-          | InvoiceDetailType.InvoiceDate;
+        var invoices = Directory.GetFiles(invoiceFolder);
+
+        foreach (var invoice in invoices)
+        {
+          Console.WriteLine($"Send request for: {invoice}");
+          RequestInvoiceDetails(apiKey, invoice, invoiceDetails, baseUrl, sdkVersion, writeFile);
+        }
       }
 
-      var invoices = Directory.GetFiles(invoiceFolder);
-
-      foreach (var invoice in invoices)
+      if (File.Exists(singleInvoice))
       {
-        RequestInvoiceDetails(apiKey, invoice, invoiceDetails);
+        Console.WriteLine($"Send request for: {singleInvoice}");
+        RequestInvoiceDetails(apiKey, singleInvoice, invoiceDetails, baseUrl, sdkVersion, writeFile);
       }
-
-      Console.WriteLine("Press any key to exit...");
-      Console.ReadKey();
     }
 
-    private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures)
+    private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures, string baseUrl, string sdkVersion, bool writeFile)
     {
-      const string urlString = "http://blumatixcapturesdk-v1-3.azurewebsites.net/invoicedetail/detect";
+      var urlString = $"{baseUrl}/invoicedetail/detect";
 
       using (var client = new HttpClient())
       {
@@ -73,7 +70,7 @@ namespace InvoiceCapture
         client.DefaultRequestHeaders.Add("X-ApiKey", apiKey);
 
         // The current version must be provided in the request!!!
-        const string version = "v1-3";
+        var version = sdkVersion;
         var request = CreateRequest(filename, invoiceFeatures, version);
 
         try
@@ -83,14 +80,20 @@ namespace InvoiceCapture
 
           if (response.IsSuccessStatusCode)
           {
-            var invoiceDetailResponse = JsonConvert.DeserializeObject<DetectInvoiceResponse>(resultString, new JsonSerializerSettings
-            {
-              Formatting = Formatting.Indented,
-              TypeNameHandling = TypeNameHandling.Auto
-            });
+            Console.WriteLine($"Received response for {filename}");
 
-            Console.WriteLine();
-            Console.WriteLine(invoiceDetailResponse);
+            dynamic parsedJson = JsonConvert.DeserializeObject(resultString);
+            var formattedResultString = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+
+            if (writeFile)
+            {
+              File.WriteAllText(filename + ".json", formattedResultString);
+            }
+            else
+            {
+              Console.WriteLine();
+              Console.WriteLine(formattedResultString);
+            }
           }
           else
           {
