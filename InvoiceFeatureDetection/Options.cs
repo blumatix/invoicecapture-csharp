@@ -23,6 +23,9 @@ namespace InvoiceCapture
     [Option('w', "writeFile", Required = false, DefaultValue = false, HelpText = "If set then the response will be written to a json file. The name will be the same as the provided invoice filename")]
     public bool WriteFile { get; set; }
 
+    [Option('p', "useProxy", Required = false, DefaultValue = false, HelpText = "Use a proxy server. Proxy url, username and password must be set in app.config")]
+    public bool UseProxy { get; set; }
+
     [HelpOption]
     public string GetUsage()
     {

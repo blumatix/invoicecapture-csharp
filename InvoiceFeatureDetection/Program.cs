@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,6 +19,7 @@ namespace InvoiceCapture
       string sdkVersion;
       bool writeFile;
       string baseUrl;
+      bool useProxy;
 
       var options = new Options();
       var parser = new CommandLine.Parser(s =>
@@ -33,6 +36,7 @@ namespace InvoiceCapture
         sdkVersion = options.SdkVersion;
         writeFile = options.WriteFile;
         baseUrl = options.BaseUrl;
+        useProxy = options.UseProxy;
       }
       else
       {
@@ -42,6 +46,8 @@ namespace InvoiceCapture
       // If set to None than we request all possible invoice details.
       var invoiceDetails = InvoiceDetailType.None;
 
+      IWebProxy proxy = useProxy ? CreateProxyFromSettings() : null;
+
       if (Directory.Exists(invoiceFolder))
       {
         var invoices = Directory.GetFiles(invoiceFolder);
@@ -49,22 +55,33 @@ namespace InvoiceCapture
         foreach (var invoice in invoices)
         {
           Console.WriteLine($"Send request for: {invoice}");
-          RequestInvoiceDetails(apiKey, invoice, invoiceDetails, baseUrl, sdkVersion, writeFile);
+          RequestInvoiceDetails(apiKey, invoice, invoiceDetails, baseUrl, sdkVersion, writeFile, proxy);
         }
       }
 
       if (File.Exists(singleInvoice))
       {
         Console.WriteLine($"Send request for: {singleInvoice}");
-        RequestInvoiceDetails(apiKey, singleInvoice, invoiceDetails, baseUrl, sdkVersion, writeFile);
+        RequestInvoiceDetails(apiKey, singleInvoice, invoiceDetails, baseUrl, sdkVersion, writeFile, proxy);
       }
     }
 
-    private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures, string baseUrl, string sdkVersion, bool writeFile)
+    private static void RequestInvoiceDetails(string apiKey, string filename, InvoiceDetailType invoiceFeatures, string baseUrl, string sdkVersion, bool writeFile, IWebProxy proxy = null)
     {
       var urlString = $"{baseUrl}/invoicedetail/detect";
 
-      using (var client = new HttpClient())
+      // Use Proxy
+      HttpClientHandler httpClientHandler = null;
+      if (proxy != null)
+      {
+        httpClientHandler = new HttpClientHandler
+        {
+          Proxy = proxy,
+          UseProxy = true
+        };
+      }
+
+      using (var client = httpClientHandler != null ? new HttpClient(httpClientHandler) : new HttpClient())
       {
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.DefaultRequestHeaders.Add("X-ApiKey", apiKey);
@@ -127,6 +144,20 @@ namespace InvoiceCapture
       var stringContent = new StringContent(request.ToJson(), Encoding.UTF8, "application/json");
 
       return stringContent;
+    }
+
+    private static IWebProxy CreateProxyFromSettings()
+    {
+      var proxyUrl = ConfigurationManager.AppSettings["ProxyUrl"];
+      var proxyUsername = ConfigurationManager.AppSettings["ProxyUsername"];
+      var proxyPassword = ConfigurationManager.AppSettings["ProxyPassword"];
+
+      var proxy = new WebProxy(new Uri(proxyUrl))
+      {
+        Credentials = new NetworkCredential(proxyUsername, proxyPassword)
+      };
+
+      return proxy;
     }
   }
 }
