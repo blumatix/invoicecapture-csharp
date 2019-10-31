@@ -25,7 +25,7 @@ Copyright c  2017
 
   -k, --key              Required. Your API key token
 
-  -s, --version          (Default: v1-7) The version of the actual BLU DELTA
+  -s, --version          (Default: v1-9) The version of the actual BLU DELTA
                          release
 
   -u, --baseUrl          (Default: http://localhost:8090) Base url of your
@@ -34,6 +34,9 @@ Copyright c  2017
   -w, --writeFile        (Default: False) If set then the response will be
                          written to a json file. The name will be the same as
                          the provided invoice filename
+                         
+  -p, --useProxy        (Default: False) Use a proxy server. Proxy url,
+                         username and password must be set in app.config
 
   --help                 Display this help screen.
 ```
