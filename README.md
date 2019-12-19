@@ -9,7 +9,7 @@ A single invoice is sent to our Invoice Capture service in the following example
 
 The result is printed to the console output.
 ```csharp
-.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://blumatixcapturesdk-v1-7.azurewebsites.net
+.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://blumatixcapturesdk-v1-9.azurewebsites.net
 ```
 
 ## Help
