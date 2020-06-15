@@ -9,7 +9,7 @@ A single invoice is sent to our Invoice Capture service in the following example
 
 The result is printed to the console output.
 ```csharp
-.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://blumatixcapturesdk-v1-9.azurewebsites.net
+.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://blumatixcapturesdk-v1-10.azurewebsites.net
 ```
 
 ## Help
@@ -25,10 +25,10 @@ Copyright c  2017
 
   -k, --key              Required. Your API key token
 
-  -s, --version          (Default: v1-9) The version of the actual BLU DELTA
+  -s, --version          (Default: v1-10) The version of the actual BLU DELTA
                          release
 
-  -u, --baseUrl          (Default: http://localhost:8090) Base url of your
+  -u, --baseUrl          (Default: http://blumatixcapturesdk-v1-10.azurewebsites.net) Base url of your
                          capturesdk version
 
   -w, --writeFile        (Default: False) If set then the response will be
