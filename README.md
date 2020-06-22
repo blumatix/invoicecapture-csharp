@@ -1,5 +1,5 @@
 # invoicecapture-csharp
-A csharp example application which demonstrates how our invoice capture REST API can be used to retrieve information about specific invoice details.
+A csharp example application which demonstrates how our [BLU DELTA AI invoice capture](https://bludelt.ai) REST API can be used to retrieve information about specific invoice details.
 
 ## Usage
 A single invoice is sent to our Invoice Capture service in the following example. It takes as arguments:
