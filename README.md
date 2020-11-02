@@ -9,14 +9,14 @@ A single invoice is sent to our Invoice Capture service in the following example
 
 The result is printed to the console output.
 ```csharp
-.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://blumatixcapturesdk-v1-10.azurewebsites.net
+.\InvoiceCapture.exe -k YOUR_API_KEY -i PATH_TO_AN_INVOICE -u https://api.bludelta.ai/v1-12
 ```
 
 ## Help
 ```csharp
 PS> .\InvoiceCapture.exe -help
-InvoiceFeatureDetection 1.0.0.0
-Copyright c  2017
+InvoiceFeatureDetection 1.1.0.0
+Copyright c  2020
 
   -f, --invoiceFolder    (Default: ) Folder which contains invoice that shall
                          be processed
@@ -25,10 +25,10 @@ Copyright c  2017
 
   -k, --key              Required. Your API key token
 
-  -s, --version          (Default: v1-10) The version of the actual BLU DELTA
+  -s, --version          (Default: v1-12) The version of the actual BLU DELTA
                          release
 
-  -u, --baseUrl          (Default: http://blumatixcapturesdk-v1-10.azurewebsites.net) Base url of your
+  -u, --baseUrl          (Default: https://api.bludelta.ai/v1-12) Base url of your
                          capturesdk version
 
   -w, --writeFile        (Default: False) If set then the response will be

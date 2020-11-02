@@ -3,7 +3,7 @@
 namespace InvoiceCapture
 {
     [Flags]
-    public enum InvoiceDetailType
+    public enum InvoiceDetailType : long
     {
         None = 0,
         Sender = 2,
@@ -30,6 +30,10 @@ namespace InvoiceCapture
         ReceiverOrderDate = 134217728,
         NetAmount = 268435456,
         VatGroup = 536870912,
-        VatTotalAmount = 1073741824
+        VatTotalAmount = 1073741824,
+        BankCode = 4294967296,
+        BankAccount = 8589934592,
+        BankGroup = 17179869184,
+        IsrNumber = 34359738368
     }
 }

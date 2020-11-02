@@ -14,10 +14,10 @@ namespace InvoiceCapture
         [Option('k', "key", Required = true, HelpText = "Your API key token")]
         public string Key { get; set; }
 
-        [Option('s', "version", Required = false, DefaultValue = "v1-10", HelpText = "The version of the actual BLU DELTA release")]
+        [Option('s', "version", Required = false, DefaultValue = "v1-12", HelpText = "The version of the actual BLU DELTA release")]
         public string SdkVersion { get; set; }
 
-        [Option('u', "baseUrl", Required = false, DefaultValue = "http://blumatixcapturesdk-v1-10.azurewebsites.net", HelpText = "Base url of your capturesdk version")]
+        [Option('u', "baseUrl", Required = false, DefaultValue = "https://api.bludelta.ai/v1-12", HelpText = "Base url of your capturesdk version")]
         public string BaseUrl { get; set; }
 
         [Option('w', "writeFile", Required = false, DefaultValue = false, HelpText = "If set then the response will be written to a json file. The name will be the same as the provided invoice filename")]
