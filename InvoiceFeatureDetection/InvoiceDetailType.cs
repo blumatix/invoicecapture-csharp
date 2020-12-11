@@ -34,6 +34,16 @@ namespace InvoiceCapture
         BankCode = 4294967296,
         BankAccount = 8589934592,
         BankGroup = 17179869184,
-        IsrNumber = 34359738368
+        IsrReference = 34359738368,
+        DiscountDate = 68719476736,
+        DiscountStart = 137438953472,
+        DiscountDuration = 274877906944,
+        DiscountPercent = 549755813888,
+        DiscountGroup = 1099511627776,
+        DueDateDate = 2199023255552,
+        DueDateStart = 4398046511104,
+        DueDateDuration = 8796093022208,
+        DueDateGroup = 17592186044416,
+        IsrSubscriber = 35184372088832
     }
 }
