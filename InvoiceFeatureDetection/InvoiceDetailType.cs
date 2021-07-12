@@ -45,6 +45,8 @@ namespace InvoiceCapture
         DueDateDuration = 8796093022208,
         DueDateGroup = 17592186044416,
         IsrSubscriber = 35184372088832,
-        KId = 70368744177664
+        KId = 70368744177664,
+        CompanyRegistrationNumber = 140737488355328,
+        Contacts = 281474976710656
     }
 }
