@@ -1,5 +1,9 @@
 # invoicecapture-csharp
-An example application which demonstrates how our invoice and document capture REST API can be used to retrieve information about specific invoice details. More information and simple test capability on our [BLU DELTA AI invoice capture / KI Rechnungserfassung](https://www.bludelta.de/en/ressources).
+Contains sample code to access our capture client.
+
+### More information and quick test capability: [BLU DELTA AI invoice capture - KI Rechnungserfassung](https://www.bludelta.de)
+### Request free API key here: [Capturing - Rechungserfassung Get Started](https://www.bludelta.de/en/get-started/)
+### Access URL (latest version): https://api.bludelta.ai/v1-17
 
 ## Usage
 A single invoice is sent to our Invoice Capture service in the following example. It takes as arguments:
