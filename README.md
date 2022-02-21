@@ -44,3 +44,4 @@ Copyright c  2021
 
   --help                 Display this help screen.
 ```
+### 5x8 Support: bludelta-support@blumatix.com
