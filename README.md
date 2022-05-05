@@ -1,3 +1,5 @@
+# Depricated, please go to [bludelta-client](https://github.com/blumatix/bludelta-client)
+
 # invoicecapture-csharp
 Contains sample code to access our capture client.
 
